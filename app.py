@@ -68,6 +68,8 @@ def get_classifier(class_name, params):
     return classifier
 
 
+accuracies = []
+
 # Display a title
 st.title('Principal Components Analysis Visualization using Streamlit')
 
@@ -140,6 +142,7 @@ st.write('Confusion matrix: ', conf_mat)
 st.write('Accuracy  =  ', accuracy_score(y_test, y_pred))
 # st.write('Precision =  ', precision_score(y_test, y_pred))
 # st.write('Recall    =  ', recall_score(y_test, y_pred))
+ac1 = accuracy_score(y_test, y_pred)
 
 # Display a title
 st.title(f'PCA applied to {dataset_selection}')
@@ -246,3 +249,18 @@ st.write('Confusion matrix: ', conf_mat)
 st.write('Accuracy  =  ', accuracy_score(y_test, y_pred))
 # st.write('Precision =  ', precision_score(y_test, y_pred))
 # st.write('Recall    =  ', recall_score(y_test, y_pred))
+ac2 = accuracy_score(y_test, y_pred)
+
+
+st.subheader('Comparison between classifiers - ')
+st.write(f"Classifier = {classifier_name}")
+st.write(f"Classifier Details = {classifier}")
+st.write("Dataset = {}".format(dataset_selection))
+st.write("Dataset Shape Before PCA : ", dataset.data.shape)
+st.write("Dataset Shape After PCA : ", df_transformed.shape)
+
+# Plot accuracy in streamlit bar chart
+accuracy_list = [['Before PCA', ac1], ['After PCA', ac2]]
+accuracies_df = pd.DataFrame(accuracy_list, columns=['PCA', 'Accuracy'])
+st.write(px.bar(accuracies_df, x='PCA', y='Accuracy',
+                title="Accuracy Comparison - Before and After PCA", height=800))
